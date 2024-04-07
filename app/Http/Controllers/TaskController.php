@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class TaskController extends Controller
 {
@@ -16,8 +18,22 @@ class TaskController extends Controller
 
     public function index()
     {
+        $home_tasks = $this->getHomeTasks();
+        return view('tasks.index')->with('home_tasks', $home_tasks);
+    }
+
+    private function getHomeTasks()
+    {
         $all_tasks = $this->task->latest()->get();
-        return view('tasks.index')->with('all_tasks', $all_tasks);
+        $home_tasks = []; // 初期化
+        foreach($all_tasks as $task)
+        {
+            if($task->user->id === Auth::user()->id)
+            {
+                $home_tasks[] = $task;
+            }
+        }
+        return $home_tasks;
     }
 
     public function store(Request $request)
@@ -26,7 +42,8 @@ class TaskController extends Controller
             'name' => 'required|min:1|max:50'
         ]);
         $this->task->name = $request->name;
-        $this->task->save();  
+        $this->task->user_id = Auth::user()->id;
+        $this->task->save();
         return redirect()->back();
     }
 

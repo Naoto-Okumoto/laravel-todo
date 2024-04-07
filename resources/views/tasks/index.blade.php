@@ -19,19 +19,18 @@
         </div>
     </form>
 
-    @if($all_tasks->isNotEmpty())
-        <ul class="list-group">
-            @foreach($all_tasks as $task)
-                <li class="list-group-item d-flex align-items-center">
-                    <p class="mb-0 me-auto">{{ $task->name}}</p>
-                    <a href="{{ route('edit', $task->id) }}" class="btn btn-secondary btn-sm" title="Edit"><i class="fa-solid fa-pen"></i></a>
-                    <form action="{{ route('delete', $task->id) }}" method="post" class="ms-1">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
-                    </form>
-                </li>
-            @endforeach
-        </ul>
-    @endif
+    <ul class="list-group">
+        @foreach($home_tasks as $task)
+            <li class="list-group-item d-flex align-items-center">
+                <p class="mb-0 me-auto">{{ $task->name}}</p>
+                <a href="{{ route('edit', $task->id) }}" class="btn btn-secondary btn-sm" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                <form action="{{ route('delete', $task->id) }}" method="post" class="ms-1">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                </form>
+            </li>
+        @endforeach
+    </ul>
+    
 @endsection
